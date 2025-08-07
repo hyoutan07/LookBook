@@ -7,11 +7,23 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model profiles {
+  // 内部で使うための、自動インクリメントされる数値ID
   id         BigInt   @id @default(autoincrement())
+
+  // 外部に公開するための、推測不可能なUUID
+  // SQLの命名規則に合わせてスネークケースに変更
+  public_id  String   @unique @default(uuid()) @db.Uuid
+
+  // 認証ユーザーのID (Supabase Authと連携)
+  // ★最も重要な変更点: SQLとの互換性のためスネークケースに変更
+  user_id    String   @unique @db.Uuid
+
+  name       String?
+  skill      String?
+  email      String?  @unique
+
   created_at DateTime @default(now()) @db.Timestamptz(6)
-  name       String
-  skill      String
+
+  @@map("profiles")
 }

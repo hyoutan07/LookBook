@@ -54,10 +54,13 @@ export default async function Home() {
         {profiles.length > 0 ? (
           <ul className="space-y-4">
             {profiles.map((profile) => (
-              <li key={profile.id} className="bg-gray-800 p-6 rounded-xl shadow-lg">
-                <p className="text-2xl font-semibold text-cyan-400">{profile.name ?? '未設定'}</p>
-                <p className="text-gray-300 mt-1">Skill: {profile.skill ?? '未設定'}</p>
-              </li>
+              // ✨【ここを修正】li全体をLinkコンポーネントで囲む
+              <Link key={profile.id} href={`/profiles/${profile.public_id}`}>
+                <li className="bg-gray-800 p-6 my-5 rounded-xl shadow-lg transition-transform hover:scale-105 hover:bg-gray-700 cursor-pointer">
+                  <p className="text-2xl font-semibold text-cyan-400">{profile.name ?? '未設定'}</p>
+                  <p className="text-gray-300 mt-1">Skill: {profile.skill ?? '未設定'}</p>
+                </li>
+              </Link>
             ))}
           </ul>
         ) : (

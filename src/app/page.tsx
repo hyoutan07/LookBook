@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { createClient } from '@/lib/supabase/server' // server用のクライアントをインポート
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 // ログアウト用のフォームコンポーネント
@@ -24,6 +25,16 @@ function LogoutButton() {
   )
 }
 
+function EditProfileButton() {
+  return (
+    <Link
+      href="/profile"
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+    >
+      プロフィール編集
+    </Link>
+  );
+}
 
 export default async function Home() {
   const profiles = await prisma.profiles.findMany();
@@ -33,7 +44,11 @@ export default async function Home() {
       <div className="w-full max-w-2xl">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-5xl font-bold">Lookbook</h1>
-          <LogoutButton /> {/* ログアウトボタンを配置 */}
+          {/* ボタンをまとめるためのdivを追加 */}
+          <div className="flex items-center gap-4">
+            <EditProfileButton /> {/* プロフィール編集ボタンを配置 */}
+            <LogoutButton />      {/* ログアウトボタンを配置 */}
+          </div>
         </div>
         
         {profiles.length > 0 ? (

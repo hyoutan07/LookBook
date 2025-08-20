@@ -4,16 +4,17 @@ import { notFound } from 'next/navigation';
 
 // ページのPropsの型定義
 type ProfileDetailPageProps = {
-  params: {
-    publicId: string; // URLの[publicId]部分がここに入る
-  };
+  params: Promise<{
+    publicId: string;
+  }>;
 };
 
 export default async function ProfileDetailPage({ params }: ProfileDetailPageProps) {
+  const {publicId} = await params;
   // 1. URLから受け取ったpublicIdを使って、DBから特定のプロフィールを1件だけ取得
-  const profile = await prisma.profiles.findUnique({
+  const profile = await prisma.profiles.findFirst({
     where: {
-      public_id: params.publicId,
+      public_id: publicId,
     },
   });
 
